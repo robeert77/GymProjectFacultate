@@ -1,0 +1,75 @@
+﻿@page
+@model GymProject.Pages.Workouts.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Workout</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Workout.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Workout.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Workout.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Workout.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Workout.StartTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Workout.StartTime)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Workout.EndTime)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Workout.EndTime)
+        </dd>
+        <dt class="col-sm-2">
+            Duration
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Workout.GetDuration()
+        </dd>
+        <dt class="col-sm-2">
+            Exercises
+        <dd class="col-sm-10">
+            <ol class="list-group list-group-numbered">
+                @foreach (var exercise in Model.AssignedExerciseDataList)
+                {
+                    if (exercise.Assigned) {
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">
+                                        @Html.DisplayFor(modelItem => exercise.WorkoutExercise.Exercise.Title)
+                                </div>
+                                    @Html.DisplayNameFor(modelItem => exercise.WorkoutExercise.Sets):
+                                    @Html.DisplayFor(modelItem => exercise.WorkoutExercise.Sets)
+                                <br />
+                                    @Html.DisplayNameFor(modelItem => exercise.WorkoutExercise.Repetitions):
+                                    @Html.DisplayFor(modelItem => exercise.WorkoutExercise.Repetitions)
+                                <br />
+                                    @Html.DisplayNameFor(modelItem => exercise.WorkoutExercise.MaxWeight):
+                                    @Html.DisplayFor(modelItem => exercise.WorkoutExercise.MaxWeight)
+                            </div>
+                        </li>
+                    }
+                }
+            </ol>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.Workout.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

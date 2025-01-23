@@ -1,0 +1,105 @@
+﻿@page
+@model GymProject.Pages.Workouts.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Workout</h4>
+<hr />
+<form method="post">
+    <div class="row">
+        <div class="col-md-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Workout.Title" class="control-label"></label>
+                <input asp-for="Workout.Title" class="form-control" />
+                <span asp-validation-for="Workout.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Workout.Description" class="control-label"></label>
+                <input asp-for="Workout.Description" class="form-control" />
+                <span asp-validation-for="Workout.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Workout.StartTime" class="control-label"></label>
+                <input asp-for="Workout.StartTime" class="form-control" />
+                <span asp-validation-for="Workout.StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Workout.EndTime" class="control-label"></label>
+                <input asp-for="Workout.EndTime" class="form-control" />
+                <span asp-validation-for="Workout.EndTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="form-group">                 
+                <div class="table">                     
+                    <table>       
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(Model => Model.AssignedExerciseDataList[0].WorkoutExercise.Exercise.Title)
+                                </th>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(Model => Model.AssignedExerciseDataList[0].WorkoutExercise.Sets)
+                                </th>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(Model => Model.AssignedExerciseDataList[0].WorkoutExercise.Repetitions)
+                                </th>
+                                <th scope="col">
+                                    @Html.DisplayNameFor(Model => Model.AssignedExerciseDataList[0].WorkoutExercise.MaxWeight)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{                                 
+                                foreach (var exercise in Model.AssignedExerciseDataList)                                 
+                                {        
+                                    <tr>
+                                        <td scope="row">                                         
+                                            <input type="checkbox" name="selectedExercises" value="@exercise.ExerciseId" 
+                                            @(Html.Raw(exercise.Assigned ? "checked=\"checked\"" : "")) />
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => exercise.WorkoutExercise.Exercise.Title)
+                                        </td>
+                                        <td>
+                                            <input type="number" name="WorkoutExercise[@exercise.ExerciseId].Sets"
+                                                   value="@exercise.WorkoutExercise?.Sets"
+                                                   class="form-control" />
+                                        </td>
+                                        <td>
+                                            <input type="number" name="WorkoutExercise[@exercise.ExerciseId].Repetitions"
+                                                   value="@exercise.WorkoutExercise?.Repetitions"
+                                                   class="form-control" />
+                                        </td>
+                                        <td>
+                                            <input type="number" name="WorkoutExercise[@exercise.ExerciseId].MaxWeight"
+                                                   value="@exercise.WorkoutExercise?.MaxWeight"
+                                                   class="form-control" />
+                                        </td>
+                                    </tr>
+                                }                             
+                            }
+                        </tbody>
+                    </table>                     
+                 </div>               
+            </div> 
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
