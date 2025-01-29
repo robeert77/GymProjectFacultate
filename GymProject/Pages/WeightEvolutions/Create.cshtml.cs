@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using GymProject.Data;
 using GymProject.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymProject.Pages.WeightEvolutions
 {
@@ -14,9 +15,12 @@ namespace GymProject.Pages.WeightEvolutions
     {
         private readonly GymProject.Data.GymProjectContext _context;
 
-        public CreateModel(GymProject.Data.GymProjectContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public CreateModel(GymProject.Data.GymProjectContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult OnGet()
@@ -30,10 +34,13 @@ namespace GymProject.Pages.WeightEvolutions
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
+            var userId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userId))
             {
-                return Page();
+                return RedirectToPage("/Index");
             }
+
+            WeightEvolution.UserId = userId;
 
             _context.WeightEvolution.Add(WeightEvolution);
             await _context.SaveChangesAsync();

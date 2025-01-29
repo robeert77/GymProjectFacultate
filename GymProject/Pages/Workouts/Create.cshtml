@@ -71,17 +71,17 @@
                                             @Html.DisplayFor(modelItem => exercise.WorkoutExercise.Exercise.Title)
                                         </td>
                                         <td>
-                                            <input type="number" name="WorkoutExercise[@exercise.ExerciseId].Sets"
+                                            <input type="number" name="exerciseSets[@exercise.ExerciseId]"
                                                    value="@exercise.WorkoutExercise?.Sets"
                                                    class="form-control" />
                                         </td>
                                         <td>
-                                            <input type="number" name="WorkoutExercise[@exercise.ExerciseId].Repetitions"
+                                            <input type="number" name="exerciseRepetitions[@exercise.ExerciseId]"
                                                    value="@exercise.WorkoutExercise?.Repetitions"
                                                    class="form-control" />
                                         </td>
                                         <td>
-                                            <input type="number" name="WorkoutExercise[@exercise.ExerciseId].MaxWeight"
+                                            <input type="number" name="exerciseMaxWeight[@exercise.ExerciseId]"
                                                    value="@exercise.WorkoutExercise?.MaxWeight"
                                                    class="form-control" />
                                         </td>

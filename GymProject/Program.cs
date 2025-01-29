@@ -16,8 +16,11 @@ builder.Services.AddRazorPages(options => {
 builder.Services.AddDbContext<GymProjectContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("GymProjectContext") ?? throw new InvalidOperationException("Connection string 'GymProjectContext' not found.")));
 
-builder.Services.AddDbContext<_LibraryIdentityContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("GymProjectContext") ?? throw new InvalidOperationException("Connection string 'GymProjectContext' not found."))); 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<_LibraryIdentityContext>();
+builder.Services.AddDbContext<_LibraryIdentityContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("GymProjectContext") ?? throw new InvalidOperationException("Connection string 'GymProjectContext' not found."))); 
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => 
+    options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<_LibraryIdentityContext>();
 
 var app = builder.Build();
 

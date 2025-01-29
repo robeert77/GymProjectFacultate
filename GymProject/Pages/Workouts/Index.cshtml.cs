@@ -14,6 +14,7 @@ namespace GymProject.Pages.Workouts
     public class IndexModel : PageModel
     {
         private readonly GymProject.Data.GymProjectContext _context;
+
         private readonly UserManager<IdentityUser> _userManager;
 
         public IndexModel(GymProject.Data.GymProjectContext context, UserManager<IdentityUser> userManager)
@@ -30,6 +31,7 @@ namespace GymProject.Pages.Workouts
 
             Workout = await _context.Workout
                 .Where(w => w.UserId == userId)
+                .OrderByDescending(w => w.StartTime)
                 .ToListAsync();
         }
     }

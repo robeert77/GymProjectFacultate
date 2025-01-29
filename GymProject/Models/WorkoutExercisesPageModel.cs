@@ -45,13 +45,13 @@ namespace GymProject.Models
             }
 
             var selectedExercisesHS = new HashSet<String>(selectedExercises);
-            var workoutExercises = new HashSet<int>(workoutToUpdate.WorkoutExercise.Select(e => e.Exercise.Id));
+            var workoutExercises = workoutToUpdate.WorkoutExercise.ToDictionary(e => e.ExerciseId);
 
             foreach (var exercise in context.Exercises)
             {
                 if (selectedExercisesHS.Contains(exercise.Id.ToString()))
                 {
-                    if (!workoutExercises.Contains(exercise.Id))
+                    if (!workoutExercises.ContainsKey(exercise.Id))
                     {
                         workoutToUpdate.WorkoutExercise.Add(
                             new WorkoutExercise {
@@ -62,14 +62,18 @@ namespace GymProject.Models
                                 MaxWeight = workoutExerciseWeights.ContainsKey(exercise.Id) ? workoutExerciseWeights[exercise.Id] : 0,
                             });
                     }
-                }
-                else
-                {
-                    if (workoutExercises.Contains(exercise.Id))
+                    else
                     {
-                        WorkoutExercise courseToRemove = workoutToUpdate.WorkoutExercise.SingleOrDefault(i => i.ExerciseId == exercise.Id);
-                        context.Remove(courseToRemove);
+                        var existingWorkoutExercise = workoutExercises[exercise.Id];
+                        existingWorkoutExercise.Sets = workoutExerciseSets.ContainsKey(exercise.Id) ? workoutExerciseSets[exercise.Id] : existingWorkoutExercise.Sets;
+                        existingWorkoutExercise.Repetitions = workoutExerciseReps.ContainsKey(exercise.Id) ? workoutExerciseReps[exercise.Id] : existingWorkoutExercise.Repetitions;
+                        existingWorkoutExercise.MaxWeight = workoutExerciseWeights.ContainsKey(exercise.Id) ? workoutExerciseWeights[exercise.Id] : existingWorkoutExercise.MaxWeight;
                     }
+                }
+                else if (workoutExercises.ContainsKey(exercise.Id))
+                {
+                    WorkoutExercise courseToRemove = workoutToUpdate.WorkoutExercise.SingleOrDefault(i => i.ExerciseId == exercise.Id);
+                    context.Remove(courseToRemove);
                 }
             }
         }

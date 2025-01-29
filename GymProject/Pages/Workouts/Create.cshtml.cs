@@ -37,7 +37,7 @@ namespace GymProject.Pages.Workouts
         public Workout Workout { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync(string[] selectedExercises)
+        public async Task<IActionResult> OnPostAsync(string[] selectedExercises, Dictionary<int, int> exerciseSets, Dictionary<int, int> exerciseRepetitions, Dictionary<int, int> exerciseMaxWeight)
         {
             var userId = _userManager.GetUserId(User);
             if (string.IsNullOrEmpty(userId))
@@ -58,8 +58,12 @@ namespace GymProject.Pages.Workouts
                 newWorkout.WorkoutExercise = new List<WorkoutExercise>();
                 foreach (var exercise in selectedExercises)
                 {
+                    int exerciseId = int.Parse(exercise);
                     var exerciseToAdd = new WorkoutExercise {
-                        ExerciseId = int.Parse(exercise)
+                        ExerciseId = exerciseId,
+                        Sets = exerciseSets.ContainsKey(exerciseId) ? exerciseSets[exerciseId] : 0,
+                        Repetitions = exerciseRepetitions.ContainsKey(exerciseId) ? exerciseRepetitions[exerciseId] : 0,
+                        MaxWeight = exerciseMaxWeight.ContainsKey(exerciseId) ? exerciseMaxWeight[exerciseId] : 0
                     };
 
                     newWorkout.WorkoutExercise.Add(exerciseToAdd);

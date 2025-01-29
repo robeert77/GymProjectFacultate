@@ -10,6 +10,7 @@ using GymProject.Data;
 using GymProject.Models;
 using Microsoft.Identity.Client.AppConfig;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymProject.Pages.Workouts
 {
@@ -17,9 +18,12 @@ namespace GymProject.Pages.Workouts
     {
         private readonly GymProject.Data.GymProjectContext _context;
 
-        public EditModel(GymProject.Data.GymProjectContext context)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public EditModel(GymProject.Data.GymProjectContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -67,11 +71,18 @@ namespace GymProject.Pages.Workouts
                 return NotFound();
             }
 
+            var userId = _userManager.GetUserId(User);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToPage("/Index");
+            }
+            workoutToUpdate.UserId = userId;
+
             if (await TryUpdateModelAsync<Workout>(
-                workoutToUpdate,
-                "Workout",
-                i => i.Title, i => i.Description,
-                i => i.StartTime, i => i.EndTime))
+                 workoutToUpdate,
+                 "Workout",
+                 i => i.Title, i => i.Description,
+                 i => i.StartTime, i => i.EndTime))
             {
                 UpdateWorkoutExercises(_context, selectedExercises, exerciseSets, exerciseRepetitions, exerciseMaxWeight, workoutToUpdate);
                 await _context.SaveChangesAsync();

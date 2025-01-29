@@ -1,11 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace GymProject.Models
 {
     public class WeightEvolution
     {
-        public int Id {  get; set; }
+        public int Id { get; set; }
+
+        [ForeignKey(nameof(User))]
+        public string ?UserId { get; set; }
+        public IdentityUser ?User { get; set; }
 
         [Display(Name = "Weight (kg)")]
         [Column(TypeName = "decimal(6, 2)")]
